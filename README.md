@@ -1,30 +1,141 @@
 # EOL Development
-# Backend formulario de pagos - BPO2B Global Inc
-_Proyecto de envio y confirmacion de token de pagos electrónicos por email._
+# Backend TFTT - BPO2B Global Inc
+_Save and consult data._
 
-## 🔧 Instalación
+[TOC]
 
-_En el directorio del proyecto, puede ejecutar:_
+## 🔧 Install
+
+_You can start in the project folder running:_
 ```
 npm i
 ```
+_And then_
 ```
 npm run start
 ```
 
-## 🛠️ Construcción
+##🔌 Endpoints
+_Save your data and retrieve your users._
 
-* [NodeJS](https://nodejs.org/en/) - Environment
-* [JavaScript](https://www.javascript.com/) - Lenguaje
+###/api/login
+_This endpoint only allows posts request_
+#### POST(body): token
+The request needs a JSON body content as following:
+   ```json
+"email": emailCredential,
+"password":passwordCredential
+```
+And will return an **authentication token** if the login is successful.
 
-## ✒️ Autores
+###/api/infouser
+_This endpoint allows to save user data, consult, update and delete that data._
 
-* **Kevin Muñoz Rengifo** - *Desarrollo* - [kevinmuz55](https://github.com/kevinmuz55)
-* **Daniel Dorado Lame** - *Desarrollo* - [ddaniel27](https://github.com/ddaniel27)
-* **Jorge Manuel Castillo** - *Desarrollo* - [jmcc153](https://github.com/jmcc153)
+_We will use `userObject` to refeer the model of an user, so refer to this table when needed:_
 
-También puedes ver la lista de todos los [contribuyentes](https://github.com/ddaniel27/EOL-FirstProject/contributors) quíenes han participado en este proyecto. 
+| _field_  | _type_  | _required_  | _assignable_  |
+| ------------ | ------------ | ------------ | ------------ |
+| email  | `String`  | `true`  | `true`  |
+| firstname  | `String`  | `true`  | `true`  |
+| lastname  | `String`  | `true`  | `true`  |
+| wallet  | `String`  | `true`  | `true`  |
+| country  | `String`  | `false`  | `true`  |
+| city  | `String`  | `false`  | `true`  |
+| address  | `String`  | `false`  | `true`  |
+| zipcode  | `String`  | `false`  | `true`  |
+| phone  | `Number`  | `false`  | `true`  |
+| created_at  | `Date`  | `false`  | `false`  |
+| upddated_at | `Date` | `false` | `false` |
+_If a field is **required** means that it needs to exists with a non falsy value in the new user._
+_If a field is **assignable** means that it can be saved in a new user._
+_The **email** field needs to be unique._
 
-## 🎁 Expresiones de Gratitud
 
-* Agradecimientos a BPO2B Global Inc
+#### *GET(@[page,limit]): {msg:String, users:[userObject]}
+You need to be authenticated to use this enpoint. To authenticate your request, send the **token** throught the **Authorization** header:
+```
+Authorization: Bearer <token>
+```
+This request accepts two query params
+
+| _param_  | _default_  |
+| ------------ | ------------ |
+| page  | 1  |
+| limit  | 10  |
+
+Use `limit` for the amount of users you want to retrieve.
+Use `page` for pagination according with `limit` value.
+
+For example:
+```
+https://www.example.com/api/infouser?page=2&limit=20
+```
+**⚠ warning:** You can set `limit` to zero if you want to get all the users, but this can harm the performance of the endpoint, so try to use it only when needed.
+
+The response body contains the following JSON-type return:
+
+```JSON
+{
+	"msg": actionMessage,
+	"users":[ userObject ]
+}
+```
+If an error happens, the response will be the error itself.
+
+#### POST(body): {msg: String, user: userObject}
+You dont need to be authenticated to send data throught this method. Doing a post request, we expect the info to be saved in a new `userObject`.
+
+**⚠ warning:** The email needs to be unique, and you have to ensure that all required fields exists or an error will be thrown.
+
+The response body contains the following JSON-type return:
+
+```JSON
+{
+	"msg": actionMessage,
+	"user":userObject
+}
+```
+If an error happens, the response will be the error itself.
+
+#### *PUT(body): {msg: String, user: userObject}
+You need to be authenticated to use this enpoint. To authenticate your request, send the **token** throught the **Authorization** header:
+```
+Authorization: Bearer <token>
+```
+The body of the request need the following fields:
+```json
+"email": emailFromUserToUpdate,
+"updateUser":{ assignableFieldsToUpdate }
+```
+If the update is successful, the `updated_at` field will save the current time
+
+The response body contains the following JSON-type return:
+
+```JSON
+{
+	"msg": actionMessage,
+	"user":userObject
+}
+```
+If an error happens, the response will be the error itself.
+
+#### *DELETE(body): {msg: String, user: userObject}
+You need to be authenticated to use this enpoint. To authenticate your request, send the **token** throught the **Authorization** header:
+```
+Authorization: Bearer <token>
+```
+The body of the request need the following fields:
+```json
+"email": emailForUserToDelete
+```
+**⚠ warning:** Be careful with this request
+
+The response body contains the following JSON-type return:
+
+```JSON
+{
+	"msg": actionMessage,
+	"user":userObject
+}
+```
+If an error happens, the response will be the error itself.
