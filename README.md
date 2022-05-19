@@ -5,6 +5,13 @@ _Save and consult data._
 
 ## 🔧 Install
 
+_You need a **.env** file with the following data:_
+
+- MONGO_URI : your mongodb uri
+- SECRET_KEY : your secret to generate tokens
+- PORT : (optional) port where the server will be listening, defaults 3000
+- ENV : (optional) just a fancy name for your enviroment 😀
+
 _You can start in the project folder running:_
 ```
 npm i
