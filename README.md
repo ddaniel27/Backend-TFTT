@@ -2,7 +2,6 @@
 # Backend TFTT - BPO2B Global Inc
 _Save and consult data._
 
-[TOC]
 
 ## 🔧 Install
 
@@ -23,8 +22,8 @@ _This endpoint only allows posts request_
 #### POST(body): token
 The request needs a JSON body content as following:
    ```json
-"email": emailCredential,
-"password":passwordCredential
+"email": "emailCredential",
+"password": "passwordCredential"
 ```
 And will return an **authentication token** if the login is successful.
 
@@ -46,6 +45,7 @@ _We will use `userObject` to refeer the model of an user, so refer to this table
 | phone  | `Number`  | `false`  | `true`  |
 | created_at  | `Date`  | `false`  | `false`  |
 | upddated_at | `Date` | `false` | `false` |
+
 _If a field is **required** means that it needs to exists with a non falsy value in the new user._
 _If a field is **assignable** means that it can be saved in a new user._
 _The **email** field needs to be unique._
@@ -76,8 +76,8 @@ The response body contains the following JSON-type return:
 
 ```JSON
 {
-	"msg": actionMessage,
-	"users":[ userObject ]
+	"msg": "actionMessage",
+	"users":[ "userObject" ]
 }
 ```
 If an error happens, the response will be the error itself.
@@ -91,8 +91,8 @@ The response body contains the following JSON-type return:
 
 ```JSON
 {
-	"msg": actionMessage,
-	"user":userObject
+	"msg": "actionMessage",
+	"user": "userObject"
 }
 ```
 If an error happens, the response will be the error itself.
@@ -104,8 +104,8 @@ Authorization: Bearer <token>
 ```
 The body of the request need the following fields:
 ```json
-"email": emailFromUserToUpdate,
-"updateUser":{ assignableFieldsToUpdate }
+"email": "emailFromUserToUpdate",
+"updateUser":{ "assignableFieldsToUpdate" }
 ```
 If the update is successful, the `updated_at` field will save the current time
 
@@ -113,8 +113,8 @@ The response body contains the following JSON-type return:
 
 ```JSON
 {
-	"msg": actionMessage,
-	"user":userObject
+	"msg": "actionMessage",
+	"user": "userObject"
 }
 ```
 If an error happens, the response will be the error itself.
@@ -126,7 +126,7 @@ Authorization: Bearer <token>
 ```
 The body of the request need the following fields:
 ```json
-"email": emailForUserToDelete
+"email": "emailForUserToDelete"
 ```
 **⚠ warning:** Be careful with this request
 
@@ -134,8 +134,8 @@ The response body contains the following JSON-type return:
 
 ```JSON
 {
-	"msg": actionMessage,
-	"user":userObject
+	"msg": "actionMessage",
+	"user": "userObject"
 }
 ```
 If an error happens, the response will be the error itself.
