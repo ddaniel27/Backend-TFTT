@@ -14,10 +14,10 @@ _And then_
 npm run start
 ```
 
-##🔌 Endpoints
+## 🔌 Endpoints
 _Save your data and retrieve your users._
 
-###/api/login
+### /api/login
 _This endpoint only allows posts request_
 #### POST(body): token
 The request needs a JSON body content as following:
@@ -27,7 +27,7 @@ The request needs a JSON body content as following:
 ```
 And will return an **authentication token** if the login is successful.
 
-###/api/infouser
+### /api/infouser
 _This endpoint allows to save user data, consult, update and delete that data._
 
 _We will use `userObject` to refeer the model of an user, so refer to this table when needed:_
