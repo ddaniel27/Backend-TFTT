@@ -67,20 +67,20 @@ module.exports = (router) => {
   )
 
   //register
-  router.route("/register")
-  .post(
-    validate([
-      body("email").isEmail().not().isEmpty(),
-      body("firstname").isAlpha('en-US', {ignore: /[\xE0-\xFF' ']/g}).not().isEmpty(),
-      body("lastname").isAlpha('en-US', {ignore: /[\xE0-\xFF' ']/g}).not().isEmpty(),
-      body("wallet").isAlphanumeric().not().isEmpty(),
-      body("country").optional().isAlpha('en-US', {ignore: /[\xE0-\xFF' ']/g}),
-      body("city").optional().isAlpha('en-US', {ignore: /[\xE0-\xFF' ']/g}),
-      body("address").optional().isAlphanumeric('en-US', {ignore: ' -'}),
-      body("zipcode").optional().isAlphanumeric(),
-      body("phone").optional().isInt()
-    ]),
-    postNewUserPassword
-  )
+  // router.route("/register")
+  // .post(
+  //   validate([
+  //     body("email").isEmail().not().isEmpty(),
+  //     body("firstname").isAlpha('en-US', {ignore: /[\xE0-\xFF' ']/g}).not().isEmpty(),
+  //     body("lastname").isAlpha('en-US', {ignore: /[\xE0-\xFF' ']/g}).not().isEmpty(),
+  //     body("wallet").isAlphanumeric().not().isEmpty(),
+  //     body("country").optional().isAlpha('en-US', {ignore: /[\xE0-\xFF' ']/g}),
+  //     body("city").optional().isAlpha('en-US', {ignore: /[\xE0-\xFF' ']/g}),
+  //     body("address").optional().isAlphanumeric('en-US', {ignore: ' -'}),
+  //     body("zipcode").optional().isAlphanumeric(),
+  //     body("phone").optional().isInt()
+  //   ]),
+  //   postNewUserPassword
+  // )
 
 }
