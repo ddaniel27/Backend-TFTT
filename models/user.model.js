@@ -100,8 +100,7 @@ function findAll(page=1, limit=10) {
     if(+limit < 1) { limit = 10 }
     return new Promise((resolve, reject) => {
         User.find({}).skip((page - 1) * limit).limit(limit).exec((err, data)=>{
-            if(err.code === 11000) { reject(new Error('Email must be unique')) }
-            else if(err) { reject(err) }
+            if(err) { reject(err) }
             else { resolve(data) }
         })
     })
