@@ -123,7 +123,7 @@ function findByEmail(email) {
 
 function findAll(page=1, limit=10) {
     if(+page < 1) { page = 1 }
-    if(+limit < 1) { limit = 10 }
+    if(+limit < 0) { limit = 10 }
     return new Promise((resolve, reject) => {
         User.find({})
             .skip((page - 1) * limit)
