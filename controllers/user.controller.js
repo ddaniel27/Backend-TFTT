@@ -1,4 +1,7 @@
-const { createNewUser, findByEmail, findAll, updateByEmail, deleteByEmail } = require('../models/user.model')
+const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
+
+const { createNewUser, findByEmail, findAll, updateByEmail, deleteByEmail, createNewUserPassword } = require('../models/user.model')
 
 
 /**
@@ -9,6 +12,16 @@ async function postNewUser(req, res){
     try {
         const newUser = req.body
         const createdUser = await createNewUser(newUser)
+        res.status(201).json({msg:"user was created",user:createdUser})
+    } catch (error) {
+        res.status(500).json(error)
+    }
+}
+
+async function postNewUserPassword(req, res){
+    try {
+        const newUser = req.body
+        const createdUser = await createNewUserPassword(newUser)
         res.status(201).json({msg:"user was created",user:createdUser})
     } catch (error) {
         res.status(500).json(error)
@@ -33,11 +46,20 @@ async function getAllUsers(req, res){
  * USA BODY PARA BUSCAR
  */
 
-async function getUserByEmail(req, res){
+async function authUserByEmail(req, res){
     try {
-        const {email} = req.body
+        const {email, password} = req.body
         const user = await findByEmail(email)
-        res.status(200).json({msg:"user found",user: user})
+
+        if(!user) { return res.status(404).json({msg:"user not found"}) }
+        
+        const isValidPassword = bcrypt.compareSync(password, user.password)
+        if(!isValidPassword) { return res.status(401).json({msg:"invalid password"}) }
+
+        jwt.sign({id: user._id}, process.env.SECRET_KEY, (err, token)=>{
+            if(err) { return res.status(500).json({msg: "error"}) }
+            res.status(200).json({ token })
+        })
     } catch (error) {
         res.status(500).json(error)
     }
@@ -71,4 +93,7 @@ async function deleteUser(req, res){
     }
 }
 
-module.exports = { postNewUser, getAllUsers, getUserByEmail, updateUser, deleteUser }
+
+
+
+module.exports = { postNewUser, postNewUserPassword, getAllUsers, authUserByEmail, updateUser, deleteUser }

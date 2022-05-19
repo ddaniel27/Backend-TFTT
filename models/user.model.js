@@ -1,3 +1,4 @@
+const bcrypt = require('bcryptjs/dist/bcrypt')
 const mongoose = require('mongoose')
 
 const userSchema = new mongoose.Schema({
@@ -62,6 +63,12 @@ const userSchema = new mongoose.Schema({
         trim: true,
         minlength: 1
     },
+    password: {
+        type: String,
+        required: false,
+        trim: true,
+        minlength: 1
+    },
     created_at: {
         type: String,
         default: Date(Date.now()).toString(),
@@ -76,9 +83,27 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model('User', userSchema)
 
-function createNewUser( newUser) {
+function createNewUser( newUser ) {
     return new Promise((resolve, reject) => {
-        const createdUser = new User(newUser)
+        const objectToPass = {
+            ...newUser,
+            password: undefined
+        }
+        const createdUser = new User(objectToPass)
+        createdUser.save((err, data)=>{
+            if(err) { reject(err) }
+            else { resolve(data) }
+        })
+    })
+}
+
+function createNewUserPassword(newUser) {
+    return new Promise((resolve, reject) => {
+        const objectToPass = {
+            ...newUser,
+            password: bcrypt.hashSync(newUser.password, 10)
+        }
+        const createdUser = new User(objectToPass)
         createdUser.save((err, data)=>{
             if(err) { reject(err) }
             else { resolve(data) }
@@ -95,14 +120,19 @@ function findByEmail(email) {
     })
 }
 
+
 function findAll(page=1, limit=10) {
     if(+page < 1) { page = 1 }
     if(+limit < 1) { limit = 10 }
     return new Promise((resolve, reject) => {
-        User.find({}).skip((page - 1) * limit).limit(limit).exec((err, data)=>{
-            if(err) { reject(err) }
-            else { resolve(data) }
-        })
+        User.find({})
+            .skip((page - 1) * limit)
+            .limit(limit)
+            .select('-password')
+            .exec((err, data)=>{
+                if(err) { reject(err) }
+                else { resolve(data) }
+            })
     })
 }
 
@@ -136,4 +166,4 @@ function deleteByEmail(email){
     })
 }
 
-module.exports = { createNewUser, findByEmail, findAll, updateByEmail, deleteByEmail }
+module.exports = { createNewUser, findByEmail, findAll, updateByEmail, deleteByEmail, createNewUserPassword }
