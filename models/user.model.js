@@ -63,6 +63,12 @@ const userSchema = new mongoose.Schema({
     trim: true,
     minlength: 1
   },
+  countryCode: {
+    type: String,
+    required: false,
+    trim: true,
+    minlength: 1
+  },
   password: {
     type: String,
     required: false,
