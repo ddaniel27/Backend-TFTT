@@ -39,19 +39,20 @@ _This endpoint allows to save user data, consult, update and delete that data._
 
 _We will use `userObject` to refeer the model of an user, so refer to this table when needed:_
 
-| _field_  | _type_  | _required_  | _assignable_  |
-| ------------ | ------------ | ------------ | ------------ |
-| email  | `String`  | `true`  | `true`  |
-| firstname  | `String`  | `true`  | `true`  |
-| lastname  | `String`  | `true`  | `true`  |
-| wallet  | `String`  | `true`  | `true`  |
-| country  | `String`  | `false`  | `true`  |
-| city  | `String`  | `false`  | `true`  |
-| address  | `String`  | `false`  | `true`  |
-| zipcode  | `String`  | `false`  | `true`  |
-| phone  | `Number`  | `false`  | `true`  |
-| created_at  | `Date`  | `false`  | `false`  |
-| upddated_at | `Date` | `false` | `false` |
+| _Field_     | _type_   | _required_ | _assignable_  |
+|:-----------:|:--------:|:----------:|:-------------:|
+| email       | `String` | `true`     | `true`        |
+| firstname   | `String` | `true`     | `true`        |
+| lastname    | `String` | `true`     | `true`        |
+| wallet      | `String` | `true`     | `true`        |
+| country     | `String` | `false`    | `true`        |
+| city        | `String` | `false`    | `true`        |
+| address     | `String` | `false`    | `true`        |
+| zipcode     | `String` | `false`    | `true`        |
+| phone       | `Number` | `false`    | `true`        |
+| phone       | `String` | `false`    | `true`        |
+| created_at  | `Date`   | `false`    | `false`       |
+| upddated_at | `Date`   | `false`    | `false`       |
 
 _If a field is **required** means that it needs to exists with a non falsy value in the new user._
 _If a field is **assignable** means that it can be saved in a new user._
