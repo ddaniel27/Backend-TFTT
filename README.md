@@ -50,7 +50,7 @@ _We will use `userObject` to refeer the model of an user, so refer to this table
 | address     | `String` | `false`    | `true`        |
 | zipcode     | `String` | `false`    | `true`        |
 | phone       | `Number` | `false`    | `true`        |
-| phone       | `String` | `false`    | `true`        |
+| countryCode | `String` | `false`    | `true`        |
 | created_at  | `Date`   | `false`    | `false`       |
 | upddated_at | `Date`   | `false`    | `false`       |
 
