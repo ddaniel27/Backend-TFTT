@@ -1,149 +1,185 @@
-# EOL Development
-# Backend TFTT - BPO2B Global Inc
-_Save and consult data._
+# TFTT
 
+*Backend*
 
-## 🔧 Install
+## Structure
 
-_You need a **.env** file with the following data:_
+Structure for this repo is based on microservices architecture, so this is the file system:
 
-- MONGO_URI : your mongodb uri
-- SECRET_KEY : your secret to generate tokens
-- PORT : (optional) port where the server will be listening, defaults 3000
-- ENV : (optional) just a fancy name for your enviroment 😀
-
-_You can start in the project folder running:_
 ```
-npm i
+/
+|
+|- index.js
+|- app.js
+|- .env
+|- /database
+|  |
+|  |- index.js
+|  |- connection.js
+|  |- /users
+|  |  |
+|  |  |- index.js
+|  |
+|  |- /admins
+|  |  |
+|  |  |- index.js
+|
+|- /components
+|  |
+|  |- index.js
+|  |- /infouser
+|  |  |
+|  |  |- index.js
+|  |
+|  |- /login
+|  |  |
+|  |  |- index.js
+|  |
+|  |- /home
+|  |  |
+|  |  |- index.js
+|
+|- /utils
+|  |
+|  |- index.js
+|  |
+|  |- /middlewares
+|  |  |
+|  |  |- auth.js
+|  |  |- validation.js
 ```
-_And then_
-```
-npm run start
-```
 
-## 🔌 Endpoints
-_Save your data and retrieve your users._
+- `index.js` is the main file and has all the global configuration for the backend.
 
-### /api/login
-_This endpoint only allows posts request_
-#### POST(body): token
-The request needs a JSON body content as following:
-   ```json
-"email": "emailCredential",
-"password": "passwordCredential"
-```
-And will return an **authentication token** if the login is successful.
+- `app.js` is the core of the backend, it exports a function to create a new app ussing dependency injection for testing purpouses.
 
-### /api/infouser
-_This endpoint allows to save user data, consult, update and delete that data._
+- `.env` is the environment variables file.
 
-_We will use `userObject` to refeer the model of an user, so refer to this table when needed:_
+- `database` folder has all the database file's related. It has a `connection.js` file which defines the connection to the DB. Every table has their own folder and all methods are exposed with the `index.js` file. 
 
-| _Field_     | _type_   | _required_ | _assignable_  |
-|:-----------:|:--------:|:----------:|:-------------:|
-| email       | `String` | `true`     | `true`        |
-| firstname   | `String` | `true`     | `true`        |
-| lastname    | `String` | `true`     | `true`        |
-| wallet      | `String` | `true`     | `true`        |
-| country     | `String` | `false`    | `true`        |
-| city        | `String` | `false`    | `true`        |
-| address     | `String` | `false`    | `true`        |
-| zipcode     | `String` | `false`    | `true`        |
-| phone       | `Number` | `false`    | `true`        |
-| countryCode | `String` | `false`    | `true`        |
-| created_at  | `Date`   | `false`    | `false`       |
-| upddated_at | `Date`   | `false`    | `false`       |
+- Inside every `components` folder there is all the related files with that specific component (endpoint).
 
-_If a field is **required** means that it needs to exists with a non falsy value in the new user._
-_If a field is **assignable** means that it can be saved in a new user._
-_The **email** field needs to be unique._
+- `utils` is a folder with shared methods that can be used by any component.
+
+---
+
+## Enviroment Variables
+
+There is a list of all enviroment variables used in this project and their description
 
 
-#### *GET(@[page,limit]): {msg:String, users:[userObject]}
-You need to be authenticated to use this enpoint. To authenticate your request, send the **token** throught the **Authorization** header:
-```
-Authorization: Bearer <token>
-```
-This request accepts two query params
 
-| _param_  | _default_  |
-| ------------ | ------------ |
-| page  | 1  |
-| limit  | 10  |
+| NAME       | TYPE   | DESCRIPTION                                      |
+|:----------:|:------:|:------------------------------------------------:|
+| PORT       | INT    | Port where the server will be listening          |
+| DB_HOST    | STRING | Database host direction                          |
+| DB_USER    | STRING | Database user with premission for read and write |
+| DB_PASS    | STRING | Database password for Database user              |
+| DB_NAME    | STRING | Database table name                              |
+| JWT_SECRET | STRING | Secrete to generate JWT                          |
 
-Use `limit` for the amount of users you want to retrieve.
-Use `page` for pagination according with `limit` value.
+---
 
-For example:
-```
-https://www.example.com/api/infouser?page=2&limit=20
-```
-**⚠ warning:** You can set `limit` to zero if you want to get all the users, but this can harm the performance of the endpoint, so try to use it only when needed.
+## Database Structure
 
-The response body contains the following JSON-type return:
+This is the structure for the database in this project:
 
-```JSON
-{
-	"msg": "actionMessage",
-	"users":[ "userObject" ]
-}
-```
-If an error happens, the response will be the error itself.
 
-#### POST(body): {msg: String, user: userObject}
-You dont need to be authenticated to send data throught this method. Doing a post request, we expect the info to be saved in a new `userObject`.
 
-**⚠ warning:** The email needs to be unique, and you have to ensure that all required fields exists or an error will be thrown.
+### Admins
 
-The response body contains the following JSON-type return:
+| NAME     | TYPE         | DESCRIPTION         |
+|:--------:|:------------:|:-------------------:|
+| email    | varchar(64)  | PRIMARY KEY.        |
+| password | varchar(64)  | NOT NULL.           |
 
-```JSON
-{
-	"msg": "actionMessage",
-	"user": "userObject"
-}
-```
-If an error happens, the response will be the error itself.
 
-#### *PUT(body): {msg: String, user: userObject}
-You need to be authenticated to use this enpoint. To authenticate your request, send the **token** throught the **Authorization** header:
-```
-Authorization: Bearer <token>
-```
-The body of the request need the following fields:
-```json
-"email": "emailFromUserToUpdate",
-"updateUser":{ "assignableFieldsToUpdate" }
-```
-If the update is successful, the `updated_at` field will save the current time
 
-The response body contains the following JSON-type return:
+### Users
 
-```JSON
-{
-	"msg": "actionMessage",
-	"user": "userObject"
-}
-```
-If an error happens, the response will be the error itself.
+| NAME         | TYPE        | DESCRIPTION          |
+|:------------:|:-----------:|:--------------------:|
+| email        | varchar(64) | PRIMARY KEY.         |
+| firstname    | varchar(64) | FOREIGN KEY.         |
+| lastname     | varchar(64) | NOT NULL.            |
+| wallet       | varchar(64) | NOT NULL.            |
+| country      | varchar(64) | NULL.                |
+| city         | varchar(64) | NULL.                |
+| address      | varchar(64) | NULL.                |
+| zipcode      | varchar(16) | NULL.                |
+| phone        | varchar(32) | NULL.                |
+| country_code | varchar(8)  | NULL.                |
+| created_at   | datetime    | CURRENT_TIMESTAMP(). |
+| updated_at   | datetime    | CURRENT_TIMESTAMP(). |
 
-#### *DELETE(body): {msg: String, user: userObject}
-You need to be authenticated to use this enpoint. To authenticate your request, send the **token** throught the **Authorization** header:
-```
-Authorization: Bearer <token>
-```
-The body of the request need the following fields:
-```json
-"email": "emailForUserToDelete"
-```
-**⚠ warning:** Be careful with this request
+---
+## Endpoints 
 
-The response body contains the following JSON-type return:
+There are three endpoints
 
-```JSON
-{
-	"msg": "actionMessage",
-	"user": "userObject"
-}
-```
-If an error happens, the response will be the error itself.
+### /
+
+#### GET (/):{ message }
+
+#### POST (/):{ message }
+
+
+
+### /login
+
+#### POST (/):{ token }
+
+**BODY PARAMS**
+- email (required): A valid email to login
+
+- password (required): A valid password to login
+
+
+
+### /infouser
+
+#### GET(/): { users }
+
+**QUERY PARAMS**
+- limit (default 10): A valid limit parameter to consult users
+
+- page (default 1): A valid page parameter to consult users
+
+#### POST(/): { message }
+
+**BODY PARAMS**
+- email (required)
+
+- firstname (required)
+
+- lastname (required)
+
+- wallet (required)
+
+- country (optional)
+
+- city (optional)
+
+- address (optional)
+
+- zipcode (optional)
+
+- phone (optional)
+
+### /consult
+
+#### POST(/posts):{ []posts }
+
+**HEADERS**
+- token (required): A valid token to validate the request
+
+**QUERY PARAMS**
+- limit (default: 100): A **number** that describes how many posts retieve. NO MAX, MIN 1
+
+#### POST(/comments):{ []posts }
+
+**HEADERS**
+- token (required): A valid token to validate the request
+
+**QUERY PARAMS**
+- limit (default: 100): A **number** that describes how many posts retieve. NO MAX, MIN 1
