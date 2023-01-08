@@ -26,7 +26,7 @@ function getUserByEmail (email) {
 function createUser (user) {
   return new Promise((resolve, reject) => {
     const query = `
-    INSERT INTO users (email, firstname, lastname, wallet, country, city, address, zipcode, countryCode, phone)
+    INSERT INTO users (email, firstname, lastname, wallet, country, city, address, zipcode, country_code, phone)
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `
     const values = [

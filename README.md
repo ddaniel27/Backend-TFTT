@@ -100,7 +100,7 @@ This is the structure for the database in this project:
 | NAME         | TYPE        | DESCRIPTION          |
 |:------------:|:-----------:|:--------------------:|
 | email        | varchar(64) | PRIMARY KEY.         |
-| firstname    | varchar(64) | FOREIGN KEY.         |
+| firstname    | varchar(64) | NOT NULL.            |
 | lastname     | varchar(64) | NOT NULL.            |
 | wallet       | varchar(64) | NOT NULL.            |
 | country      | varchar(64) | NULL.                |

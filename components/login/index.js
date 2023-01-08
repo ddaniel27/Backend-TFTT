@@ -24,4 +24,6 @@ module.exports = ({ admins }, { auth }) => {
         res.status(500).json({ error: err.message })
       }
     })
+
+  return router
 }
