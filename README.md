@@ -9,7 +9,7 @@ Structure for this repo is based on microservices architecture, so this is the f
 ```
 /
 |
-|- index.js
+˫- index.js
 |- app.js
 |- .env
 |- /database
